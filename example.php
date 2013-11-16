@@ -8,13 +8,18 @@ function __autoload($className) {
 }
 
 try {
-    $inputFile = './InputFolder/kor.txt';
+    // път до файла за конвертиране
+    $inputFile = './SampleFiles/kor.txt';
+    // прочитане на файла като текстов низ
     $inputString = file_get_contents($inputFile);
 
+    // създаване на нов входен файл с формат KOR
     $newFormat = \Patterns\Factory\InputFormatFactory::create($inputString, 'KOR', 'XML');
-    $newFormat->setOutputFormat('XML');
+    // последващо задаване на изходен формат
+    $newFormat->setOutputFormat('TXT');
+    // конвертиране на входния файл в зададения изходенн формат
     $newFormat->convert();
-
+    // показване на конвертирания файл като символен низ
     echo $newFormat->toString();
 } catch (\Exception $e) {
     echo $e->getMessage();
