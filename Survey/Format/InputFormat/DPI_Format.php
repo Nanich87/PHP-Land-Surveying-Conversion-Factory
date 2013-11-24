@@ -13,7 +13,7 @@ class DPI_Format extends \Survey\Format\InputFormat\Base_Format {
             throw new \Exception('Input file cannot be empty!');
         }
         $this->_inputFile = explode(PHP_EOL, $inputFileString);
-        $this->_outputType = new \Survey\Data\LineDataTypeConversion();
+        $this->_outputType = new \Survey\Data\InputData\DINI_FORMAT();
         $this->setOutputFormat($outputFormat);
     }
 
