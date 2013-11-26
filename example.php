@@ -16,7 +16,7 @@ try {
     // създаване на нов входен файл с формат KOR
     $newFormat = \Patterns\Factory\InputFormatFactory::create($inputString, 'KOR', 'XML');
     // последващо задаване на изходен формат
-    $newFormat->setOutputFormat('TXT');
+    $newFormat->setOutputFormat('KML');
     // конвертиране на входния файл в зададения изходенн формат
     $newFormat->convert();
     // показване на конвертирания файл като символен низ
