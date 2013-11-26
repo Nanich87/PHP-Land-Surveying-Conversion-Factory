@@ -10,7 +10,8 @@ class Base_Format {
     private $_supportedOutputFormats = array(
         'XML' => 'eXtensible Markup Language',
         'TXT' => 'Text File',
-        'JSON' => 'JavaScript Object Notation'
+        'JSON' => 'JavaScript Object Notation',
+        'KML' => 'Keyhole Markup Language'
     );
 
     public function setOutputFormat($outputFormat = DEFAULT_OUTPUT_FORMAT) {

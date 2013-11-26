@@ -8,7 +8,7 @@ class KML_Format implements \Survey\Format\OutputFormat\OutputFormatInterface {
     private $_type = null;
     private $_format = 'KML';
 
-    public function __construct($data, \Survey\Data\InputData\KOR_Format $type) {
+    public function __construct($data, \Survey\Data\InputData\InputDataInterface $type) {
         $this->_data = $data;
         $this->_type = $type;
     }
@@ -17,7 +17,7 @@ class KML_Format implements \Survey\Format\OutputFormat\OutputFormatInterface {
         $this->_data = $data;
     }
 
-    public function setDataType(\Survey\Data\InputData\KOR_Format $type) {
+    public function setDataType(\Survey\Data\InputData\InputDataInterface $type) {
         $this->_type = $type;
     }
 
