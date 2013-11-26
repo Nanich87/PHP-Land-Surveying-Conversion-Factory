@@ -13,6 +13,7 @@ class OutputFormatFactory {
             case 'XML': return new \Survey\Format\OutputFormat\XML_Format($outputData, $outputType);
             case 'TXT': return new \Survey\Format\OutputFormat\TXT_Format($outputData, $outputType);
             case 'JSON': return new \Survey\Format\OutputFormat\JSON_Format($outputData, $outputType);
+            case 'KML': return new \Survey\Format\OutputFormat\KML_Format($outputData, $outputType);
             default: throw new \Exception('Invalid output format!');
         }
     }
