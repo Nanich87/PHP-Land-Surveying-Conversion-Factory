@@ -42,4 +42,18 @@ class KOR_Format implements \Survey\Data\InputData\InputDataInterface {
         return $outputString;
     }
 
+    private function KML() {
+        $outputString = '<?xml version="1.0" encoding="UTF-8"?>';
+        $outputString .= '<kml xmlns="http://www.opengis.net/kml/2.2">';
+        foreach ($outputData as $point) {
+            $outputString .= '<Placemark>';
+            $outputString .= sprintf('<name>%s</name>', $point['point_name']);
+            $outputString .= sprintf('<description>%s</description>', $point['height']);
+            $outputString .= sprintf('<Point><coordinates>%s,%s</coordinates></Point>', $point['x'], $point['y']);
+            $outputString .= '</Placemark>';
+        }
+        $outputString .= '</kml>';
+        return $outputString;
+    }
+
 }
