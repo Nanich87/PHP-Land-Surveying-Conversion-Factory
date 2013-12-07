@@ -4,30 +4,27 @@ namespace Survey\Format\InputFormat;
 
 class DPI_Format extends \Survey\Format\InputFormat\Base_Format {
 
-    private $_inputFile = [];
+    protected $_inputFile;
     private $_outputData = [];
-    private $_outputType = null;
+    private $_outputType;
 
-    public function __construct($inputFileString, $outputFormat = DEFAULT_OUTPUT_FORMAT) {
-        if (strlen($inputFileString) == 0) {
-            throw new \Exception('Input file cannot be empty!');
-        }
-        $this->_inputFile = explode(PHP_EOL, $inputFileString);
+    public function __construct($inputFileString, $outputFormat) {
+        parent::__construct($inputFileString, $outputFormat);
+        $this->inputFile = explode(PHP_EOL, $inputFileString);
         $this->_outputType = new \Survey\Data\InputData\DINI_FORMAT();
-        $this->setOutputFormat($outputFormat);
     }
 
     public function convert() {
-        $fileSize = count($this->_inputFile);
+        $fileSize = count($this->inputFile);
         for ($i = 3; $i < $fileSize - 1; $i++) {
-            $this->_inputFile[$i] = preg_replace("/\s\s+/", ' ', trim($this->_inputFile[$i]));
-            $lineSize = count(explode(' ', $this->_inputFile[$i]));
+            $this->inputFile[$i] = preg_replace("/\s\s+/", ' ', trim($this->inputFile[$i]));
+            $lineSize = count(explode(' ', $this->inputFile[$i]));
             switch ($lineSize) {
                 case 4:
-                    list($backBenchmark) = sscanf($this->_inputFile[$i], 'Stn %s Vi 0.000');
+                    list($backBenchmark) = sscanf($this->inputFile[$i], 'Stn %s Vi 0.000');
                     break;
                 case 6:
-                    list($forwardBenchmark, $length, $elevation) = sscanf($this->_inputFile[$i], 'Nt %s D %f h %f');
+                    list($forwardBenchmark, $length, $elevation) = sscanf($this->inputFile[$i], 'Nt %s D %f h %f');
                     $this->_outputData[] = array(
                         'back_benchmark' => $backBenchmark,
                         'forward_benchmark' => $forwardBenchmark,

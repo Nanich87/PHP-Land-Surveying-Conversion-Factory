@@ -2,37 +2,32 @@
 
 namespace Survey\Format\InputFormat;
 
-class KOR_Format extends \Survey\Format\InputFormat\Base_Format {
+class KPT_Format extends \Survey\Format\InputFormat\Base_Format {
 
-    protected $_inputFile;
+    protected $inputFile;
     private $_outputData = [];
     private $_outputType;
 
     public function __construct($inputFileString, $outputFormat) {
         parent::__construct($inputFileString, $outputFormat);
         $this->inputFile = explode(PHP_EOL, $inputFileString);
-        $this->_outputType = new \Survey\Data\InputData\KOR_Format();
+        $this->_outputType = new \Survey\Data\InputData\KPT_Format();
     }
 
     public function convert() {
         $fileSize = count($this->inputFile);
-        for ($i = 3; $i < $fileSize - 1; $i++) {
+        for ($i = 1; $i < $fileSize - 1; $i++) {
             $this->inputFile[$i] = preg_replace("/\s\s+/", ' ', trim($this->inputFile[$i]));
             $lineSize = count(explode(' ', $this->inputFile[$i]));
             switch ($lineSize) {
-                case 10:
-                    list($pointName, $pointClass, $x, $y, $levelClass, $height, $mx, $my, $ms, $mh) = sscanf($this->inputFile[$i], '%s %d %f %f %d %f %f %f %f %f');
+                case 5:
+                    list($pointNumber, $x, $y, $height, $description) = sscanf($this->inputFile[$i], '%s %f %f %f %s');
                     $this->_outputData[] = array(
-                        'point_name' => $pointName,
-                        'point_class' => $pointClass,
+                        'point_number' => $pointNumber,
                         'x' => $x,
                         'y' => $y,
-                        'level_class' => $levelClass,
                         'height' => $height,
-                        'mx' => $mx,
-                        'my' => $my,
-                        'ms' => $ms,
-                        'mh' => $mh
+                        'description' => $description
                     );
                     break;
             }

@@ -4,23 +4,19 @@ namespace Survey\Format\InputFormat;
 
 class DINI_Format extends \Survey\Format\InputFormat\Base_Format {
 
-    private $_inputFile = [];
+    protected $inputFile;
     private $_outputData = [];
-    private $_outputType = null;
+    private $_outputType;
 
-    public function __construct($inputFileString, $outputFormat = DEFAULT_OUTPUT_FORMAT) {
-        if (strlen($inputFileString) == 0) {
-            throw new \Exception('Input file cannot be empty!');
-        }
-        $this->_inputFile = $inputFileString;
+    public function __construct($inputFileString, $outputFormat) {
+        parent::__construct($inputFileString, $outputFormat);
         $this->_outputType = new \Survey\Data\InputData\DINI_Format();
-        $this->setOutputFormat($outputFormat);
     }
 
     public function convert() {
         $pattern = '/(\d+\s+Start-Line\s+BF\s+\d+)(.*?)(\d+\s+End-Line\s+\d+)/ism';
         $matches = [];
-        if (preg_match_all($pattern, $this->_inputFile, $matches)) {
+        if (preg_match_all($pattern, $this->inputFile, $matches)) {
             foreach ($matches[0] as $line) {
                 $line = explode(PHP_EOL, $line);
                 $size = count($line);

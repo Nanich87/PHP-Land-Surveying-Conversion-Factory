@@ -2,10 +2,11 @@
 
 namespace Survey\Format\InputFormat;
 
-class Base_Format {
+abstract class Base_Format {
 
     const DEFAULT_OUTPUT_FORMAT = 'XML';
 
+    protected $inputFile = null;
     protected $оutputFormat = null;
     private $_supportedOutputFormats = array(
         'XML' => 'eXtensible Markup Language',
@@ -13,6 +14,14 @@ class Base_Format {
         'JSON' => 'JavaScript Object Notation',
         'KML' => 'Keyhole Markup Language'
     );
+
+    public function __construct($inputFileString, $outputFormat = DEFAULT_OUTPUT_FORMAT) {
+        if (strlen($inputFileString) == 0) {
+            throw new \Exception('Input file cannot be empty!');
+        }
+        $this->inputFile = $inputFileString;
+        $this->setOutputFormat($outputFormat);
+    }
 
     public function setOutputFormat($outputFormat = DEFAULT_OUTPUT_FORMAT) {
         if (isset($this->_supportedOutputFormats[$outputFormat])) {
@@ -31,4 +40,7 @@ class Base_Format {
         return $outputFileString->getData();
     }
 
+    abstract function toArray();
+
+    abstract function toString();
 }

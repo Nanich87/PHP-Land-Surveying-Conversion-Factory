@@ -34,9 +34,9 @@ class KOR_Format implements \Survey\Data\InputData\InputDataInterface {
         return $outputString;
     }
 
-    private function TXT($data) {
+    private function TXT($outputData) {
         $outputString = '';
-        foreach ($data as $point) {
+        foreach ($outputData as $point) {
             $outputString .= implode(' ', $point) . PHP_EOL;
         }
         return $outputString;
