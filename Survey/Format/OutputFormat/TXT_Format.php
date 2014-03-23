@@ -2,7 +2,7 @@
 
 namespace Survey\Format\OutputFormat;
 
-class TXT_Format implements \Survey\Format\OutputFormat\General_Format {
+class TXT_Format extends \Survey\Format\OutputFormat\General_Format {
 
     private $format = 'TXT';
 

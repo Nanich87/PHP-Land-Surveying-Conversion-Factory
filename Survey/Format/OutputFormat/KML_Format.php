@@ -2,7 +2,7 @@
 
 namespace Survey\Format\OutputFormat;
 
-class KML_Format implements \Survey\Format\OutputFormat\General_Format {
+class KML_Format extends \Survey\Format\OutputFormat\General_Format {
 
     private $format = 'KML';
 
