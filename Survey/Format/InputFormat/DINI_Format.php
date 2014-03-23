@@ -6,38 +6,51 @@ class DINI_Format extends \Survey\Format\InputFormat\Base_Format {
 
     protected $inputFile;
     private $_outputData = [];
-    private $_outputType;
+    private $_inputDataType;
 
-    public function __construct($inputFileString, $outputFormat) {
+    public function __construct($inputFileString, $outputFormat)
+    {
         parent::__construct($inputFileString, $outputFormat);
-        $this->_outputType = new \Survey\Data\InputData\DINI_Format();
+        $this->_inputDataType = new \Survey\Data\InputData\DINI_Format();
     }
 
-    public function convert() {
+    public function convert()
+    {
         $pattern = '/(\d+\s+Start-Line\s+BF\s+\d+)(.*?)(\d+\s+End-Line\s+\d+)/ism';
         $matches = [];
-        if (preg_match_all($pattern, $this->inputFile, $matches)) {
-            foreach ($matches[0] as $line) {
+        if (preg_match_all($pattern, $this->inputFile, $matches))
+        {
+            foreach ($matches[0] as $line)
+            {
                 $line = explode(PHP_EOL, $line);
                 $size = count($line);
-                for ($i = 1; $i < $size - 3; $i++) {
-                    if ($i % 3 == 0) {
+                for ($i = 1; $i < $size - 3; $i++)
+                {
+                    if ($i % 3 == 0)
+                    {
                         $rb = explode(' ', preg_replace("/\s\s+/", ' ', trim($line[$i - 1])));
                         $rf = explode(' ', preg_replace("/\s\s+/", ' ', trim($line[$i])));
-                        if ($rb[1] != 'X' && $rf[1] == 'X') {
+                        if ($rb[1] != 'X' && $rf[1] == 'X')
+                        {
                             $backBenchmark = $rb[1];
                             $elevation += $rb[5] - $rf[5];
                             $length += $rb[7] + $rf[7];
                             continue;
-                        } elseif ($rb[1] == 'X' && $rf[1] == 'X') {
+                        }
+                        elseif ($rb[1] == 'X' && $rf[1] == 'X')
+                        {
                             $elevation += $rb[5] - $rf[5];
                             $length += $rb[7] + $rf[7];
                             continue;
-                        } elseif ($rb[1] == 'X' && $rf[1] != 'X') {
+                        }
+                        elseif ($rb[1] == 'X' && $rf[1] != 'X')
+                        {
                             $forwardBenchmark = $rf[1];
                             $elevation += $rb[5] - $rf[5];
                             $length += $rb[7] + $rf[7];
-                        } else {
+                        }
+                        else
+                        {
                             $backBenchmark = $rb[1];
                             $forwardBenchmark = $rf[1];
                             $elevation = $rb[5] - $rf[5];
@@ -57,12 +70,14 @@ class DINI_Format extends \Survey\Format\InputFormat\Base_Format {
         }
     }
 
-    public function toArray() {
+    public function toArray()
+    {
         return $this->_outputData;
     }
 
-    public function toString() {
-        $outputString = $this->getData($this->_outputData, $this->_outputType, $this->оutputFormat);
+    public function toString()
+    {
+        $outputString = $this->getData($this->_outputData, $this->_inputDataType, $this->оutputFormat);
         return $outputString;
     }
 
