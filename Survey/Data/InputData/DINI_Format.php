@@ -4,36 +4,45 @@ namespace Survey\Data\InputData;
 
 class DINI_Format implements \Survey\Data\InputData\InputDataInterface {
 
-    public function convertData($outputData, $outputFormat) {
-        if (method_exists(__CLASS__, $outputFormat)) {
-            return $this->$outputFormat($outputData);
-        } else {
-            throw new \Exception('Invalid output format!');
+    public function convertData($outputData, $outputFormat)
+    {
+        $method = 'convertTo' . $outputFormat;
+        if (method_exists(__CLASS__, $method))
+        {
+            return $this->$method($outputData);
+        }
+        else
+        {
+            throw new \Exception(sprintf("%s does not support conversion to %s!", __CLASS__, $outputFormat));
         }
     }
 
-    private function XML($data) {
-        $outputString = '<levelingNetwork>';
-        $outputString .= '<weightMode>1</weightMode>';
-        $outputString .= '<lines>';
-        foreach ($data as $line) {
-            $outputString .= '<line>';
-            $outputString .= sprintf('<backBenchmark>%s</backBenchmark>', $line['back_benchmark']);
-            $outputString .= sprintf('<forwardBenchmark>%s</forwardBenchmark>', $line['forward_benchmark']);
-            $outputString .= sprintf('<elevation>%1.4f</elevation>', $line['elevation']);
-            $outputString .= sprintf('<length>%1.2f</length>', $line['length']);
-            $outputString .= sprintf('<station>0</station>');
-            $outputString .= '</line>';
+    private function convertToXML($outputData)
+    {
+        $outputString = '<LevelingNetwork>';
+        $outputString .= '<WeightMode>1</WeightMode>';
+        $outputString .= '<Lines>';
+        foreach ($outputData as $Line)
+        {
+            $outputString .= '<Line>';
+            $outputString .= sprintf('<BackBenchmark>%s</BackBenchmark>', $Line['back_benchmark']);
+            $outputString .= sprintf('<ForwardBenchmark>%s</ForwardBenchmark>', $Line['forward_benchmark']);
+            $outputString .= sprintf('<Elevation>%1.4f</Elevation>', $Line['elevation']);
+            $outputString .= sprintf('<Length>%1.2f</Length>', $Line['length']);
+            $outputString .= sprintf('<Station>0</Station>');
+            $outputString .= '</Line>';
         }
-        $outputString .= '</lines>';
-        $outputString .= '</levelingNetwork>';
+        $outputString .= '</Lines>';
+        $outputString .= '</LevelingNetwork>';
         return $outputString;
     }
 
-    private function TXT($data) {
+    private function convertToTXT($outputData)
+    {
         $outputString = '';
-        foreach ($data as $line) {
-            $outputString .= sprintf("%s %s %1.4f %1.2f 0%s", $line['back_benchmark'], $line['forward_benchmark'], $line['elevation'], $line['length'], PHP_EOL);
+        foreach ($outputData as $Line)
+        {
+            $outputString .= sprintf("%s %s %1.4f %1.2f 0%s", $Line['back_benchmark'], $Line['forward_benchmark'], $Line['elevation'], $Line['length'], PHP_EOL);
         }
         return $outputString;
     }

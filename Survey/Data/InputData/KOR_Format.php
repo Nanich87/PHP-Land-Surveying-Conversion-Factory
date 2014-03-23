@@ -4,48 +4,59 @@ namespace Survey\Data\InputData;
 
 class KOR_Format implements \Survey\Data\InputData\InputDataInterface {
 
-    public function convertData($outputData, $outputFormat) {
-        if (method_exists(__CLASS__, $outputFormat)) {
-            return $this->$outputFormat($outputData);
-        } else {
-            throw new \Exception('Invalid output format!');
+    public function convertData($outputData, $outputFormat)
+    {
+        $method = 'convertTo' . $outputFormat;
+        if (method_exists(__CLASS__, $method))
+        {
+            return $this->$method($outputData);
+        }
+        else
+        {
+            throw new \Exception(sprintf("%s does not support conversion to %s!", __CLASS__, $outputFormat));
         }
     }
 
-    private function XML($outputData) {
-        $outputString = '<network>';
-        $outputString .= '<points>';
-        foreach ($outputData as $point) {
-            $outputString .= '<point>';
-            $outputString .= sprintf('<pointName>%s</pointName>', $point['point_name']);
-            $outputString .= sprintf('<pointClass>%s</pointClass>', $point['point_class']);
-            $outputString .= sprintf('<positionX>%1.3f</positionX>', $point['x']);
-            $outputString .= sprintf('<positionY>%1.3f</positionY>', $point['y']);
-            $outputString .= sprintf('<heightClass>%s</heightClass>', $point['level_class']);
-            $outputString .= sprintf('<height>%1.3f</height>', $point['height']);
-            $outputString .= sprintf('<rmsX>%1.3f</rmsX>', $point['mx']);
-            $outputString .= sprintf('<rmsY>%1.3f</rmsY>', $point['my']);
-            $outputString .= sprintf('<totalRMS>%1.3f</totalRMS>', $point['ms']);
-            $outputString .= sprintf('<rmsH>%1.3f</rmsH>', $point['mh']);
-            $outputString .= '</point>';
+    private function convertToXML($outputData)
+    {
+        $outputString = '<Network>';
+        $outputString .= '<Points>';
+        foreach ($outputData as $point)
+        {
+            $outputString .= '<Point>';
+            $outputString .= sprintf('<Number>%s</Number>', $point['point_name']);
+            $outputString .= sprintf('<HClass>%s</HClass>', $point['point_class']);
+            $outputString .= sprintf('<PositionX>%1.3f</PositionX>', $point['x']);
+            $outputString .= sprintf('<PositionY>%1.3f</PositionY>', $point['y']);
+            $outputString .= sprintf('<VClass>%s</VClass>', $point['level_class']);
+            $outputString .= sprintf('<Height>%1.3f</Height>', $point['height']);
+            $outputString .= sprintf('<Mx>%1.3f</Mx>', $point['mx']);
+            $outputString .= sprintf('<My>%1.3f</My>', $point['my']);
+            $outputString .= sprintf('<Ms>%1.3f</Ms>', $point['ms']);
+            $outputString .= sprintf('<Mh>%1.3f</Mh>', $point['mh']);
+            $outputString .= '</Point>';
         }
-        $outputString .= '</points>';
-        $outputString .= '</network>';
+        $outputString .= '</Points>';
+        $outputString .= '</Network>';
         return $outputString;
     }
 
-    private function TXT($outputData) {
+    private function convertToTXT($outputData)
+    {
         $outputString = '';
-        foreach ($outputData as $point) {
+        foreach ($outputData as $point)
+        {
             $outputString .= implode(' ', $point) . PHP_EOL;
         }
         return $outputString;
     }
 
-    private function KML($outputData) {
+    private function convertToKML($outputData)
+    {
         $outputString = '<?xml version="1.0" encoding="UTF-8"?>';
         $outputString .= '<kml xmlns="http://www.opengis.net/kml/2.2">';
-        foreach ($outputData as $point) {
+        foreach ($outputData as $point)
+        {
             $outputString .= '<Placemark>';
             $outputString .= sprintf('<name>%s</name>', $point['point_name']);
             $outputString .= sprintf('<description>%s</description>', $point['height']);
