@@ -13,7 +13,7 @@ class TXT_Format extends \Survey\Format\OutputFormat\General_Format {
 
     public function getData()
     {
-        return $this->_type->convertData($this->_data, $this->format);
+        return $this->type->convertData($this->data, $this->format);
     }
 
 }
