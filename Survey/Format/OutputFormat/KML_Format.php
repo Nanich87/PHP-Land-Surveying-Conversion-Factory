@@ -2,27 +2,18 @@
 
 namespace Survey\Format\OutputFormat;
 
-class KML_Format implements \Survey\Format\OutputFormat\OutputFormatInterface {
+class KML_Format implements \Survey\Format\OutputFormat\General_Format {
 
-    private $_data = [];
-    private $_type = null;
-    private $_format = 'KML';
+    private $format = 'KML';
 
-    public function __construct($data, \Survey\Data\InputData\InputDataInterface $type) {
-        $this->_data = $data;
-        $this->_type = $type;
+    public function __construct($data, \Survey\Data\InputData\InputDataInterface $type)
+    {
+        parent::__construct($data, $type);
     }
 
-    public function setData($data) {
-        $this->_data = $data;
-    }
-
-    public function setDataType(\Survey\Data\InputData\InputDataInterface $type) {
-        $this->_type = $type;
-    }
-
-    public function getData() {
-        return $this->_type->convertData($this->_data, $this->_format);
+    public function getData()
+    {
+        return $this->_type->convertData($this->_data, $this->format);
     }
 
 }
