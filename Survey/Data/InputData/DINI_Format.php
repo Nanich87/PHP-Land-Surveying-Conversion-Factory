@@ -46,5 +46,10 @@ class DINI_Format implements \Survey\Data\InputData\InputDataInterface {
         }
         return $outputString;
     }
+    
+    private function convertToJSON($outputData)
+    {
+        return json_encode($outputData);
+    }
 
 }

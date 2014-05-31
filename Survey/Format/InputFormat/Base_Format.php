@@ -8,7 +8,13 @@ abstract class Base_Format {
 
     protected $inputFile = null;
     protected $оutputFormat = null;
-    private $_supportedOutputFormats = array(
+    private static $_supportedInputFormats = array(
+        array('id' => 'DINI', 'type' => 'DINI'),
+        array('id' => 'DPI', 'type' => 'DPI'),
+        array('id' => 'KOR', 'type' => 'KOR'),
+        array('id' => 'KPT', 'type' => 'KPT')
+    );
+    private static $_supportedOutputFormats = array(
         'XML' => 'eXtensible Markup Language',
         'TXT' => 'Text File',
         'JSON' => 'JavaScript Object Notation',
@@ -27,7 +33,7 @@ abstract class Base_Format {
 
     public function setOutputFormat($outputFormat = DEFAULT_OUTPUT_FORMAT)
     {
-        if (isset($this->_supportedOutputFormats[$outputFormat]))
+        if (isset(self::$_supportedOutputFormats[$outputFormat]))
         {
             $this->оutputFormat = $outputFormat;
         }
@@ -36,10 +42,15 @@ abstract class Base_Format {
             throw new \Exception('Invalid output format!');
         }
     }
+    
+    public static function getSupportedInputFormats()
+    {
+        return self::$_supportedInputFormats;
+    }
 
     public static function getSupportedOutputFormats()
     {
-        return $this->_supportedOutputFormats;
+        return self::$_supportedOutputFormats;
     }
 
     protected function getData($outputData, $outputType, $outputFormat = DEFAULT_OUTPUT_FORMAT)
