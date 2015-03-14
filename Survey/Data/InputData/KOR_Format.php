@@ -4,25 +4,19 @@ namespace Survey\Data\InputData;
 
 class KOR_Format implements \Survey\Data\InputData\InputDataInterface {
 
-    public function convertData($outputData, $outputFormat)
-    {
+    public function convertData($outputData, $outputFormat) {
         $method = 'convertTo' . $outputFormat;
-        if (method_exists(__CLASS__, $method))
-        {
+        if (method_exists(__CLASS__, $method)) {
             return $this->$method($outputData);
-        }
-        else
-        {
+        } else {
             throw new \Exception(sprintf("%s does not support conversion to %s!", __CLASS__, $outputFormat));
         }
     }
 
-    private function convertToXML($outputData)
-    {
+    private function convertToXML($outputData) {
         $outputString = '<Network>';
         $outputString .= '<Points>';
-        foreach ($outputData as $point)
-        {
+        foreach ($outputData as $point) {
             $outputString .= '<Point>';
             $outputString .= sprintf('<Number>%s</Number>', $point['point_name']);
             $outputString .= sprintf('<HClass>%s</HClass>', $point['point_class']);
@@ -41,22 +35,18 @@ class KOR_Format implements \Survey\Data\InputData\InputDataInterface {
         return $outputString;
     }
 
-    private function convertToTXT($outputData)
-    {
+    private function convertToTXT($outputData) {
         $outputString = '';
-        foreach ($outputData as $point)
-        {
+        foreach ($outputData as $point) {
             $outputString .= implode(' ', $point) . PHP_EOL;
         }
         return $outputString;
     }
 
-    private function convertToKML($outputData)
-    {
+    private function convertToKML($outputData) {
         $outputString = '<?xml version="1.0" encoding="UTF-8"?>';
         $outputString .= '<kml xmlns="http://www.opengis.net/kml/2.2">';
-        foreach ($outputData as $point)
-        {
+        foreach ($outputData as $point) {
             $outputString .= '<Placemark>';
             $outputString .= sprintf('<name>%s</name>', $point['point_name']);
             $outputString .= sprintf('<description>%s</description>', $point['height']);
@@ -67,8 +57,7 @@ class KOR_Format implements \Survey\Data\InputData\InputDataInterface {
         return $outputString;
     }
 
-    private function convertToJSON($outputData)
-    {
+    private function convertToJSON($outputData) {
         return json_encode($outputData);
     }
 
