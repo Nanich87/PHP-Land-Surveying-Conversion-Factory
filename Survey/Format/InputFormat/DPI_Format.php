@@ -5,13 +5,16 @@ namespace Survey\Format\InputFormat;
 class DPI_Format extends \Survey\Format\InputFormat\Base_Format {
 
     protected $_inputFile;
-    private $_outputData = [];
-    private $_inputDataType;
+    
+    private $_data = [];
+    private $_dataFormat;
 
     public function __construct($inputFileString, $outputFormat) {
         parent::__construct($inputFileString, $outputFormat);
+        
         $this->inputFile = explode(PHP_EOL, $inputFileString);
-        $this->_inputDataType = new \Survey\Data\InputData\DINI_FORMAT();
+        
+        $this->_dataFormat = new \Survey\Data\Convert\DPI_FORMAT();
     }
 
     public function convert() {
@@ -25,7 +28,7 @@ class DPI_Format extends \Survey\Format\InputFormat\Base_Format {
                     break;
                 case 6:
                     list($forwardBenchmark, $length, $elevation) = sscanf($this->inputFile[$i], 'Nt %s D %f h %f');
-                    $this->_outputData[] = array(
+                    $this->_data[] = array(
                         'back_benchmark' => $backBenchmark,
                         'forward_benchmark' => $forwardBenchmark,
                         'elevation' => $elevation,
@@ -37,11 +40,12 @@ class DPI_Format extends \Survey\Format\InputFormat\Base_Format {
     }
 
     public function toArray() {
-        return $this->_outputData;
+        return $this->_data;
     }
 
     public function toString() {
-        $outputString = $this->getData($this->_outputData, $this->_inputDataType, $this->оutputFormat);
+        $outputString = $this->getData($this->_data, $this->_dataFormat, $this->оutputFormat);
+        
         return $outputString;
     }
 

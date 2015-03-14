@@ -65,8 +65,7 @@ $outputFileTypeList = \Survey\Format\InputFormat\Base_Format::getSupportedOutput
                 }
                 catch (\Exception $e)
                 {
-                    echo $e->getFile();
-                    echo $e->getLine();
+                    echo $e->getMessage();
                 }
             }
             ?>

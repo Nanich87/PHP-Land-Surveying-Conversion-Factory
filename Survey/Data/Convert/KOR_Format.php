@@ -1,22 +1,23 @@
 <?php
 
-namespace Survey\Data\InputData;
+namespace Survey\Data\Convert;
 
-class KOR_Format implements \Survey\Data\InputData\InputDataInterface {
+class KOR_Format implements \Contracts\ConvertibleFormat {
 
-    public function convertData($outputData, $outputFormat) {
-        $method = 'convertTo' . $outputFormat;
-        if (method_exists(__CLASS__, $method)) {
-            return $this->$method($outputData);
-        } else {
-            throw new \Exception(sprintf("%s does not support conversion to %s!", __CLASS__, $outputFormat));
+    public function convert($data, $format) {
+        $method = 'convertTo' . $format;
+        if (!method_exists(__CLASS__, $method)) {
+            throw new \Exception(sprintf("%s does not support conversion to %s!", __CLASS__, $format));
         }
+
+        return $this->$method($data);
     }
 
-    private function convertToXML($outputData) {
+    private function convertToXML($data) {
         $outputString = '<Network>';
         $outputString .= '<Points>';
-        foreach ($outputData as $point) {
+        
+        foreach ($data as $point) {
             $outputString .= '<Point>';
             $outputString .= sprintf('<Number>%s</Number>', $point['point_name']);
             $outputString .= sprintf('<HClass>%s</HClass>', $point['point_class']);
@@ -30,35 +31,42 @@ class KOR_Format implements \Survey\Data\InputData\InputDataInterface {
             $outputString .= sprintf('<Mh>%1.3f</Mh>', $point['mh']);
             $outputString .= '</Point>';
         }
+        
         $outputString .= '</Points>';
         $outputString .= '</Network>';
+        
         return $outputString;
     }
 
-    private function convertToTXT($outputData) {
+    private function convertToTXT($data) {
         $outputString = '';
-        foreach ($outputData as $point) {
+        
+        foreach ($data as $point) {
             $outputString .= implode(' ', $point) . PHP_EOL;
         }
+        
         return $outputString;
     }
 
-    private function convertToKML($outputData) {
+    private function convertToKML($data) {
         $outputString = '<?xml version="1.0" encoding="UTF-8"?>';
         $outputString .= '<kml xmlns="http://www.opengis.net/kml/2.2">';
-        foreach ($outputData as $point) {
+        
+        foreach ($data as $point) {
             $outputString .= '<Placemark>';
             $outputString .= sprintf('<name>%s</name>', $point['point_name']);
             $outputString .= sprintf('<description>%s</description>', $point['height']);
             $outputString .= sprintf('<Point><coordinates>%s,%s</coordinates></Point>', $point['x'], $point['y']);
             $outputString .= '</Placemark>';
         }
+        
         $outputString .= '</kml>';
+        
         return $outputString;
     }
 
-    private function convertToJSON($outputData) {
-        return json_encode($outputData);
+    private function convertToJSON($data) {
+        return json_encode($data);
     }
 
 }

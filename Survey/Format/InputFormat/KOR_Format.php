@@ -5,13 +5,15 @@ namespace Survey\Format\InputFormat;
 class KOR_Format extends \Survey\Format\InputFormat\Base_Format {
 
     protected $_inputFile;
-    private $_outputData = [];
-    private $_inputDataType;
+    private $_data = [];
+    private $_dataFormat;
 
     public function __construct($inputFileString, $outputFormat) {
         parent::__construct($inputFileString, $outputFormat);
+
         $this->inputFile = explode(PHP_EOL, $inputFileString);
-        $this->_inputDataType = new \Survey\Data\InputData\KOR_Format();
+
+        $this->_dataFormat = new \Survey\Data\Convert\KOR_Format();
     }
 
     public function convert() {
@@ -22,7 +24,7 @@ class KOR_Format extends \Survey\Format\InputFormat\Base_Format {
             switch ($lineSize) {
                 case 10:
                     list($pointName, $pointClass, $x, $y, $levelClass, $height, $mx, $my, $ms, $mh) = sscanf($this->inputFile[$i], '%s %d %f %f %d %f %f %f %f %f');
-                    $this->_outputData[] = array(
+                    $this->_data[] = array(
                         'point_name' => $pointName,
                         'point_class' => $pointClass,
                         'x' => $x,
@@ -40,11 +42,12 @@ class KOR_Format extends \Survey\Format\InputFormat\Base_Format {
     }
 
     public function toArray() {
-        return $this->_outputData;
+        return $this->_data;
     }
 
     public function toString() {
-        $outputFileString = $this->getData($this->_outputData, $this->_inputDataType, $this->оutputFormat);
+        $outputFileString = $this->getData($this->_data, $this->_dataFormat, $this->оutputFormat);
+
         return $outputFileString;
     }
 

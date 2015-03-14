@@ -5,12 +5,13 @@ namespace Survey\Format\InputFormat;
 class DINI_Format extends \Survey\Format\InputFormat\Base_Format {
 
     protected $inputFile;
-    private $_outputData = [];
-    private $_inputDataType;
+    private $_data = [];
+    private $_dataFormat;
 
     public function __construct($inputFileString, $outputFormat) {
         parent::__construct($inputFileString, $outputFormat);
-        $this->_inputDataType = new \Survey\Data\InputData\DINI_Format();
+
+        $this->_dataFormat = new \Survey\Data\Convert\DINI_Format();
     }
 
     public function convert() {
@@ -43,7 +44,7 @@ class DINI_Format extends \Survey\Format\InputFormat\Base_Format {
                             $elevation = $rb[5] - $rf[5];
                             $length = $rb[7] + $rf[7];
                         }
-                        $this->_outputData[] = array(
+                        $this->_data[] = array(
                             'back_benchmark' => $backBenchmark,
                             'forward_benchmark' => $forwardBenchmark,
                             'elevation' => $elevation,
@@ -58,11 +59,12 @@ class DINI_Format extends \Survey\Format\InputFormat\Base_Format {
     }
 
     public function toArray() {
-        return $this->_outputData;
+        return $this->_data;
     }
 
     public function toString() {
-        $outputString = $this->getData($this->_outputData, $this->_inputDataType, $this->оutputFormat);
+        $outputString = $this->getData($this->_data, $this->_dataFormat, $this->оutputFormat);
+
         return $outputString;
     }
 

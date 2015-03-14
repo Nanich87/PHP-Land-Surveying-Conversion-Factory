@@ -21,20 +21,25 @@ abstract class Base_Format {
         'KML' => 'Keyhole Markup Language'
     );
 
-    public function __construct($inputFileString, $outputFormat = DEFAULT_OUTPUT_FORMAT) {
+    public function __construct($inputFileString, $outputFormat = self::DEFAULT_OUTPUT_FORMAT) {
         if (strlen($inputFileString) == 0) {
-            throw new \Exception('Input file cannot be empty!');
+            throw new \Exception('Input string cannot be empty!');
         }
+
         $this->inputFile = $inputFileString;
         $this->setOutputFormat($outputFormat);
     }
 
-    public function setOutputFormat($outputFormat = DEFAULT_OUTPUT_FORMAT) {
-        if (isset(self::$_supportedOutputFormats[$outputFormat])) {
-            $this->оutputFormat = $outputFormat;
-        } else {
+    public function setOutputFormat($outputFormat = self::DEFAULT_OUTPUT_FORMAT) {
+        if (!$this->isValidOutputFormat($outputFormat)) {
             throw new \Exception('Invalid output format!');
         }
+
+        $this->оutputFormat = $outputFormat;
+    }
+
+    private function isValidOutputFormat($format) {
+        return isset(self::$_supportedOutputFormats[$format]) ? true : false;
     }
 
     public static function getSupportedInputFormats() {
@@ -45,8 +50,9 @@ abstract class Base_Format {
         return self::$_supportedOutputFormats;
     }
 
-    protected function getData($outputData, $outputType, $outputFormat = DEFAULT_OUTPUT_FORMAT) {
-        $outputFileString = \Patterns\Factory\OutputFormatFactory::create($outputData, $outputType, $outputFormat);
+    protected function getData($data, $dataFormat, $outputFormat = self::DEFAULT_OUTPUT_FORMAT) {
+        $outputFileString = \Patterns\Factory\OutputFormatFactory::create($data, $dataFormat, $outputFormat);
+
         return $outputFileString->getData();
     }
 

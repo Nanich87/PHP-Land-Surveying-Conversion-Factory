@@ -5,13 +5,15 @@ namespace Survey\Format\InputFormat;
 class KPT_Format extends \Survey\Format\InputFormat\Base_Format {
 
     protected $inputFile;
-    private $_outputData = [];
-    private $_inputDataType;
+    private $_data = [];
+    private $_dataFormat;
 
     public function __construct($inputFileString, $outputFormat) {
         parent::__construct($inputFileString, $outputFormat);
+
         $this->inputFile = explode(PHP_EOL, $inputFileString);
-        $this->_inputDataType = new \Survey\Data\InputData\KPT_Format();
+
+        $this->_dataFormat = new \Survey\Data\Convert\KPT_Format();
     }
 
     public function convert() {
@@ -22,7 +24,7 @@ class KPT_Format extends \Survey\Format\InputFormat\Base_Format {
             switch ($lineSize) {
                 case 5:
                     list($pointNumber, $x, $y, $height, $description) = sscanf($this->inputFile[$i], '%s %f %f %f %s');
-                    $this->_outputData[] = array(
+                    $this->_data[] = array(
                         'point_number' => $pointNumber,
                         'x' => $x,
                         'y' => $y,
@@ -35,11 +37,12 @@ class KPT_Format extends \Survey\Format\InputFormat\Base_Format {
     }
 
     public function toArray() {
-        return $this->_outputData;
+        return $this->_data;
     }
 
     public function toString() {
-        $outputFileString = $this->getData($this->_outputData, $this->_inputDataType, $this->оutputFormat);
+        $outputFileString = $this->getData($this->_data, $this->_dataFormat, $this->оutputFormat);
+
         return $outputFileString;
     }
 
